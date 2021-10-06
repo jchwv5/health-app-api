@@ -1,4 +1,4 @@
-# Sports Apparel API
+# Patient Health API
 
 ## Getting Started
 ### Start the Server
