@@ -113,6 +113,7 @@ public class PatientFactory {
             "other"
     };
     private static Random randomGenerator = new Random();
+
     /**
      * Returns a random first name from the list of first names
      * @return - a firstName string
@@ -178,26 +179,18 @@ public class PatientFactory {
      * @return - an age integer
      */
     public static Integer getAge() {
-        return randomGenerator.nextInt(99);
+        return randomGenerator.nextInt(99) + 1;
     };
     /**
      * Returns a randomly generated height
      * @return - a height BigDecimal
      */
-    public static BigDecimal getHeight() {
-        BigDecimal max = new BigDecimal(6.6);
-        BigDecimal randFromDouble = new BigDecimal(Math.random());
-        return randFromDouble.divide(max,BigDecimal.ROUND_DOWN);
-    };
+    public static Integer getHeight() {return randomGenerator.nextInt(80) + 1; };
     /**
      * Returns a randomly generated weight
      * @return - a weight BigDecimal
      */
-    public static BigDecimal getWeight() {
-        BigDecimal max = new BigDecimal(250);
-        BigDecimal randFromDouble = new BigDecimal(Math.random());
-        return randFromDouble.divide(max,BigDecimal.ROUND_DOWN);
-    };
+    public static Integer getWeight() {return randomGenerator.nextInt(400) + 1; };
     /**
      * Returns a random insurance from the list of insurances
      * @return - an insurance string
@@ -240,8 +233,8 @@ public class PatientFactory {
         String state = PatientFactory.getState();
         String postal = PatientFactory.getPostal();
         Integer age = PatientFactory.getAge();
-        BigDecimal height = PatientFactory.getHeight();
-        BigDecimal weight = PatientFactory.getWeight();
+        Integer height = PatientFactory.getHeight();
+        Integer weight = PatientFactory.getWeight();
         String insurance = PatientFactory.getInsurance();
         String gender = PatientFactory.getGender();
         patient.setFirstName(firstName);

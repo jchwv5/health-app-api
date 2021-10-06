@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Patient {
@@ -30,9 +31,9 @@ public class Patient {
 
     private Integer age;
 
-    private BigDecimal height;
+    private Integer height;
 
-    private BigDecimal Weight;
+    private Integer weight;
 
     private String insurance;
 
@@ -51,8 +52,8 @@ public class Patient {
                    String state,
                    String postal,
                    Integer age,
-                   BigDecimal height,
-                   BigDecimal weight,
+                   Integer height,
+                   Integer weight,
                    String insurance,
                    String gender) {
         this.id = id;
@@ -66,7 +67,7 @@ public class Patient {
         this.postal = postal;
         this.age = age;
         this.height = height;
-        Weight = weight;
+        this.weight = weight;
         this.insurance = insurance;
         this.gender = gender;
     }
@@ -151,20 +152,20 @@ public class Patient {
         this.age = age;
     }
 
-    public BigDecimal getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(BigDecimal height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 
-    public BigDecimal getWeight() {
-        return Weight;
+    public Integer getWeight() {
+        return weight;
     }
 
-    public void setWeight(BigDecimal weight) {
-        Weight = weight;
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public String getInsurance() {
@@ -181,5 +182,92 @@ public class Patient {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Patient product = (Patient) o;
+
+        if (!Objects.equals(firstName, product.firstName)) {
+            return false;
+        }
+        if (!Objects.equals(lastName, product.lastName)) {
+            return false;
+        }
+        if (!Objects.equals(ssn, product.ssn)) {
+            return false;
+        }
+        if (!Objects.equals(email, product.email)) {
+            return false;
+        }
+        if (!Objects.equals(street, product.street)) {
+            return false;
+        }
+        if (!Objects.equals(city, product.city)) {
+            return false;
+        }
+        if (!Objects.equals(state, product.state)) {
+            return false;
+        }
+        if (!Objects.equals(postal, product.postal)) {
+            return false;
+        }
+        if (!Objects.equals(age, product.age)) {
+            return false;
+        }
+        if (!Objects.equals(height, product.height)) {
+            return false;
+        }
+        if (!Objects.equals(weight, product.weight)) {
+            return false;
+        }
+        if (!Objects.equals(insurance, product.insurance)) {
+            return false;
+        }
+        return !Objects.equals(gender, product.gender);
+    }
+    @Override
+    public int hashCode() {
+        int result = firstName != null ? firstName.hashCode() : 0;
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (ssn != null ? ssn.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (street != null ? street.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (postal != null ? postal.hashCode() : 0);
+        result = 31 * result + (age != null ? age.hashCode() : 0);
+        result = 31 * result + (height != null ? height.hashCode() : 0);
+        result = 31 * result + (weight != null ? weight.hashCode() : 0);
+        result = 31 * result + (insurance != null ? insurance.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", ssn='" + ssn + '\'' +
+                ", email='" + email + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", postal='" + postal + '\'' +
+                ", age='" + age + '\'' +
+                ", height='" + height + '\'' +
+                ", weight='" + weight + '\'' +
+                ", insurance='" + insurance + '\'' +
+                ", gender=" + gender +
+                '}';
     }
 }
