@@ -1,5 +1,7 @@
 package io.catalyte.training.patienthealth.data;
 
+import io.catalyte.training.patienthealth.domains.encounter.Encounter;
+import io.catalyte.training.patienthealth.domains.encounter.EncounterRepository;
 import io.catalyte.training.patienthealth.domains.patient.Patient;
 import io.catalyte.training.patienthealth.domains.patient.PatientRepository;
 import org.apache.logging.log4j.LogManager;
@@ -17,8 +19,11 @@ import java.util.List;
 public class DemoData implements CommandLineRunner {
     private final Logger logger = LogManager.getLogger(DemoData.class);
     PatientFactory patientFactory = new PatientFactory();
+    EncounterFactory encounterFactory = new EncounterFactory();
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private EncounterRepository encounterRepository;
     @Autowired
     private Environment env;
 
@@ -42,11 +47,28 @@ public class DemoData implements CommandLineRunner {
         }
 
         // Generate products
-        List<Patient> productList = patientFactory.generateRandomPatients(numberOfPatients);
+        List<Patient> patientList = patientFactory.generateRandomPatients(numberOfPatients);
 
         // Persist them to the database
         logger.info("Loading " + numberOfPatients + " patients...");
-        patientRepository.saveAll(productList);
+        patientRepository.saveAll(patientList);
+
+        int numberOfEncounters;
+
+        try {
+            // Retrieve the value of custom property in application.yml
+            numberOfEncounters = Integer.parseInt(env.getProperty("encounters.number"));
+        } catch (NumberFormatException nfe) {
+            // If it's not a string, set it to be a default value
+            numberOfEncounters = 500;
+        }
+
+        // Generate products
+        List<Encounter> encounterList = encounterFactory.generateRandomEncounters(numberOfEncounters);
+
+        // Persist them to the database
+        logger.info("Loading " + numberOfEncounters + " encounters...");
+        encounterRepository.saveAll(encounterList);
 
         logger.info("Data load completed.You can make requests now.");
 

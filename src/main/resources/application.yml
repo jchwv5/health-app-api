@@ -9,6 +9,10 @@ patients:
   number: 10
   load: true
 
+encounters:
+  number: 25
+  load: true
+
 logging:
   level:
     org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: ERROR

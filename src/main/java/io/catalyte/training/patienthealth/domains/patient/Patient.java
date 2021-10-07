@@ -1,10 +1,12 @@
 package io.catalyte.training.patienthealth.domains.patient;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import io.catalyte.training.patienthealth.domains.encounter.Encounter;
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
+import org.hibernate.validator.constraints.UniqueElements;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,32 +14,35 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Required
     private String firstName;
-
+    @Required
     private String lastName;
-
+    @Required
     private String ssn;
-
+    @Required
     private String email;
-
+    @Required
     private String street;
-
+    @Required
     private String city;
-
+    @Required
     private String state;
-
+    @Required
     private String postal;
-
+    @Required
     private Integer age;
-
+    @Required
     private Integer height;
-
+    @Required
     private Integer weight;
-
+    @Required
     private String insurance;
-
+    @Required
     private String gender;
+
+    @OneToMany(mappedBy = "patientId")
+    private List<Encounter> encounters;
 
     public Patient() {
     }
@@ -55,7 +60,8 @@ public class Patient {
                    Integer height,
                    Integer weight,
                    String insurance,
-                   String gender) {
+                   String gender,
+                   List<Encounter> encounters) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -70,6 +76,7 @@ public class Patient {
         this.weight = weight;
         this.insurance = insurance;
         this.gender = gender;
+        this.encounters = encounters;
     }
 
     public Long getId() {
@@ -184,6 +191,14 @@ public class Patient {
         this.gender = gender;
     }
 
+    public List<Encounter> getEncounters() {
+        return encounters;
+    }
+
+    public void setEncounters(List<Encounter> encounters) {
+        this.encounters = encounters;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -231,6 +246,9 @@ public class Patient {
         if (!Objects.equals(insurance, product.insurance)) {
             return false;
         }
+        if (!Objects.equals(encounters, product.encounters)) {
+            return false;
+        }
         return !Objects.equals(gender, product.gender);
     }
     @Override
@@ -267,7 +285,8 @@ public class Patient {
                 ", height='" + height + '\'' +
                 ", weight='" + weight + '\'' +
                 ", insurance='" + insurance + '\'' +
-                ", gender=" + gender +
+                ", gender=" + gender + '\'' +
+                ", encounters=" + encounters +
                 '}';
     }
 }

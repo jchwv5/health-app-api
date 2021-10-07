@@ -1,10 +1,5 @@
 package io.catalyte.training.patienthealth.exceptions;
 
-import static io.catalyte.training.patienthealth.constants.StringConstants.BAD_REQUEST;
-import static io.catalyte.training.patienthealth.constants.StringConstants.NOT_FOUND;
-import static io.catalyte.training.patienthealth.constants.StringConstants.SERVER_ERROR;
-import static io.catalyte.training.patienthealth.constants.StringConstants.UNPROCESSABLE_ENTITY;
-
 import java.util.Date;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
+
+import static io.catalyte.training.patienthealth.constants.StringConstants.*;
 
 /**
  * A controller advice allows you to use exactly the same exception handling techniques but apply
@@ -66,6 +63,21 @@ public class ExceptionController {
 
     return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
   }
+
+
+  /**
+   * @param exception response thrown
+   * @return string constant CONFLICT_ERROR, date, and exception message
+   */
+  @ExceptionHandler(ConflictException.class)
+  protected ResponseEntity<ExceptionResponse> conflictException(
+          ConflictException exception) {
+    ExceptionResponse response =
+            new ExceptionResponse(CONFLICT, new Date(), exception.getMessage());
+
+    return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+  }
+
 
 
   /**

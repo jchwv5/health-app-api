@@ -207,7 +207,7 @@ public class PatientFactory {
     };
 
     /**
-     * Generates a number of random products based on input.
+     * Generates a number of random patients based on input.
      *
      * @param numberOfPatients - the number of random patients to generate
      * @return - a list of random patients
