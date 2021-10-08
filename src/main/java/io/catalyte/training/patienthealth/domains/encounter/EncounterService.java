@@ -4,8 +4,14 @@ import java.util.List;
 
 public interface EncounterService {
 
-    List<Encounter> getEncounters(Encounter encounter);
+    List<Encounter> getEncounters();
 
     Encounter saveEncounter(Encounter encounter, Long id);
+
+    Encounter updateEncounter(Long patientId, Long id, Encounter encounter);
+
+    List<Encounter> getEncountersByPatientId(Long patientId);
+
+    Encounter getEncounterById(Long id);
 
 }

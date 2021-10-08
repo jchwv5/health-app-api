@@ -14,4 +14,6 @@ public interface PatientService {
 
     Patient findPatientByEmail(String email);
 
+    Long deletePatientById(Long id);
+
 }

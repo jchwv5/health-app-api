@@ -9,13 +9,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EncounterServiceImpl implements EncounterService{
@@ -30,25 +28,33 @@ public class EncounterServiceImpl implements EncounterService{
 
     private final EncounterValidation encounterValidation = new EncounterValidation();
 
-    @Autowired
-    public EncounterServiceImpl(EncounterRepository encounterRepository,
-                              EntityManager entityManager) {
-        this.encounterRepository = encounterRepository;
-        this.patientRepository = patientRepository;
-        this.entityManager = entityManager;
-    }
-
-    public EncounterServiceImpl(EncounterRepository encounterRepository) {
-    }
-
-    public List<Encounter> getEncounters(Encounter encounter) {
+    public List<Encounter> getEncounters() {
         try {
-            return encounterRepository.findAll(Example.of(encounter));
+            return encounterRepository.findAll();
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw new ServerError(e.getMessage());
         }
     }
+
+    public List<Encounter> getEncountersByPatientId(Long patientId) {
+        try {
+            return encounterRepository.findByPatientId(patientId);
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw new ServerError(e.getMessage());
+        }
+    }
+
+    public Encounter getEncounterById(Long id) {
+        try {
+            return encounterRepository.getEncounterById(id);
+        } catch (DataAccessException e) {
+            logger.error(e.getMessage());
+            throw new ServerError(e.getMessage());
+        }
+    }
+
 
     /**
      * Insert and save a new Patient to database.
@@ -69,5 +75,52 @@ public class EncounterServiceImpl implements EncounterService{
             throw new ServerError(e.getMessage());
         }
         return encounter;
+    }
+
+    /**
+     * Updates an Encounter given they are given the right credentials
+     *
+     * @param id - id of the encounter to update
+     * @param encounter - encounter to update
+     * @return Encounter - Updated encounter
+     */
+    @Override
+    public Encounter updateEncounter(Long patientId, Long id, Encounter encounter) {
+
+        Encounter existingEncounter;
+
+        try {
+            existingEncounter = encounterRepository.findById(id).orElse(null);
+        } catch (DataAccessException dae) {
+            logger.error(dae.getMessage());
+            throw new ServerError(dae.getMessage());
+        }
+
+        if (existingEncounter == null) {
+            logger.error("Encounter with id: " + id + " does not exist");
+            throw new ResourceNotFound("Encounter with id: " + id + " does not exist");
+        }
+
+        if (patientId != encounter.getPatientId()) {throw new BadRequest("Invalid Patient ID provided for path");}
+        if (id != encounter.getId()){throw new BadRequest("Invalid Encounter ID provided for path");}
+        encounterValidation.validateEncounter(encounter);
+        //CHECKS IF PATIENT EXISTS IN THE DATABASE
+
+
+
+
+        // GIVE THE ENCOUNTER ID IF NOT SPECIFIED IN BODY TO AVOID DUPLICATE USERS
+        if (encounter.getId() == null) {
+            encounter.setId(id);
+        }
+
+        try {
+            logger.info("Updated encounter ID: " + encounter.getId());
+            return encounterRepository.save(encounter);
+        } catch (DataAccessException dae) {
+            logger.error(dae.getMessage());
+            throw new ServerError(dae.getMessage());
+        }
+
     }
 }

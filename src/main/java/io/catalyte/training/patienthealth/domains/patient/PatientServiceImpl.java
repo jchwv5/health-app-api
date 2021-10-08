@@ -1,5 +1,6 @@
 package io.catalyte.training.patienthealth.domains.patient;
 
+import io.catalyte.training.patienthealth.domains.encounter.Encounter;
 import io.catalyte.training.patienthealth.exceptions.BadRequest;
 import io.catalyte.training.patienthealth.exceptions.ConflictException;
 import io.catalyte.training.patienthealth.exceptions.ResourceNotFound;
@@ -13,10 +14,11 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PatientServiceImpl implements PatientService{
+public class PatientServiceImpl implements PatientService {
 
     private final Logger logger = LogManager.getLogger(PatientServiceImpl.class);
     private final PatientValidation patientValidation = new PatientValidation();
@@ -26,15 +28,6 @@ public class PatientServiceImpl implements PatientService{
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository,
-                              EntityManager entityManager) {
-        this.patientRepository = patientRepository;
-        this.entityManager = entityManager;
-    }
-
-    public PatientServiceImpl(PatientRepository patientRepository) {
-    }
     @Override
     public List<Patient> getPatients(Patient patient) {
         try {
@@ -47,6 +40,7 @@ public class PatientServiceImpl implements PatientService{
 
     /**
      * Finds a patient in the database by ID
+     *
      * @param id - ID to search the database for
      * @return patient - patient with associated patientId
      */
@@ -95,7 +89,7 @@ public class PatientServiceImpl implements PatientService{
     /**
      * Updates a User given they are given the right credentials
      *
-     * @param id - id of the patient to update
+     * @param id      - id of the patient to update
      * @param patient - patient to update
      * @return Patient - Updated patient
      */
@@ -104,7 +98,9 @@ public class PatientServiceImpl implements PatientService{
 
         Patient existingPatient;
 
-        if (id != patient.getId()) {throw new BadRequest("Invalid Patient ID provided for path");}
+        if (id != patient.getId()) {
+            throw new BadRequest("Invalid Patient ID provided for path");
+        }
         patientValidation.validatePatient(patient);
         //CHECKS IF PATIENT EXISTS IN THE DATABASE
         try {
@@ -140,8 +136,10 @@ public class PatientServiceImpl implements PatientService{
         }
 
     }
+
     /**
      * Retrieves the patient info with the matching email from the database.
+     *
      * @param email - patient email to find
      * @return patient
      */
@@ -163,5 +161,25 @@ public class PatientServiceImpl implements PatientService{
         }
     }
 
-
+    /**
+     * This method will delete a product from the database only if the ID of the product matches the
+     * provided ID
+     *
+     * @param id - The ID of the product to be deleted from the database
+     * @return
+     */
+    @Override
+    public Long deletePatientById(Long id) {
+        Patient patient = getPatientById(id);
+        List<Encounter> encounters = patient.getEncounters();
+        if (!encounters.isEmpty()) {
+            throw new ConflictException("Cannot delete a patient with encounters");
+        }
+        try {
+            return patientRepository.deletePatientById(id);
+        } catch (Exception e) {
+            throw new ServerError(e.getMessage());
+        }
+    }
 }
+

@@ -75,8 +75,8 @@ public class PatientController {
     /**
      * Controller method for updating the Patient
      *
-     * @param id          Id of the patient to update
-     * @param patient        Patient to update
+     * @param id - Id of the patient to update
+     * @param patient - Patient to update
      * @return Patient - Updated patient
      */
     @PutMapping(path = "/{id}")
@@ -86,6 +86,24 @@ public class PatientController {
     ) {
         logger.info("Request received for Update User");
         return new ResponseEntity<>(patientService.updatePatient(id, patient), HttpStatus.OK);
+    }
+
+    /**
+     * Deletes a product from the database with a product ID matching the ID provided
+     * @param id - The ID of the product in question to be deleted
+     * @return
+     */
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseBody
+    public ResponseEntity<Long> deletePatientById(@PathVariable Long id) {
+        var isRemoved = patientService.deletePatientById(id);
+
+        if (isRemoved == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.info("Patient with the ID of " + id + " was successfully deleted");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

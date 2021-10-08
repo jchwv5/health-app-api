@@ -1,5 +1,6 @@
 package io.catalyte.training.patienthealth.domains.encounter;
 
+import io.catalyte.training.patienthealth.domains.patient.Patient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,39 @@ public class EncounterController {
 
         return new ResponseEntity<>(encounter, HttpStatus.CREATED);
     }
+
+    /**
+     * Controller method for updating the Encounter
+     *
+     * @param id - Id of the encounter to update
+     * @param encounter - Encounter to update
+     * @return Patient - Updated encounter
+     */
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<Encounter> updateEncounter(
+            @PathVariable Long id,
+            @PathVariable Long patientId,
+            @RequestBody Encounter encounter
+    ) {
+        logger.info("Request received for Update User");
+        return new ResponseEntity<>(encounterService.updateEncounter(patientId, id, encounter), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Encounter>> getEncountersByPatientId(@PathVariable Long patientId)
+        throws Exception {
+        return new ResponseEntity<>(encounterService.getEncountersByPatientId(patientId), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Encounter> getEncounterId(@PathVariable Long id)
+            throws Exception {
+        return new ResponseEntity<>(encounterService.getEncounterById(id), HttpStatus.OK);
+    }
+
+
+
+
 
 
 
