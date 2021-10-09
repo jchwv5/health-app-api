@@ -17,22 +17,13 @@ import static io.catalyte.training.patienthealth.constants.Paths.ENCOUNTERS_PATH
 @RequestMapping(value = ENCOUNTERS_PATH)
 public class EncounterController {
     Logger logger = LogManager.getLogger(EncounterController.class);
-
-    private final EncounterService encounterService;
-    private final EncounterRepository encounterRepository;
-
     @Autowired
-    public EncounterController(
-            EncounterService encounterService,
-            EncounterRepository encounterRepository) {
-        this.encounterService = encounterService;
-        this.encounterRepository = encounterRepository;
-    }
+    private EncounterService encounterService;
 
     @PostMapping
-    public ResponseEntity saveEncounter(@RequestBody Encounter encounter, @PathVariable Long patientId) {
+    public ResponseEntity saveEncounter(@RequestBody Encounter encounter) {
 
-        encounterService.saveEncounter(encounter, patientId);
+        encounterService.saveEncounter(encounter);
 
         return new ResponseEntity<>(encounter, HttpStatus.CREATED);
     }
