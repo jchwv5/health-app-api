@@ -28,6 +28,10 @@ public class EncounterServiceImpl implements EncounterService{
 
     private final EncounterValidation encounterValidation = new EncounterValidation();
 
+    /**
+     * Retrieves all encounters from the database
+     * @return List of all encounters present in the database
+     */
     public List<Encounter> getEncounters() {
         try {
             return encounterRepository.findAll();
@@ -37,6 +41,11 @@ public class EncounterServiceImpl implements EncounterService{
         }
     }
 
+    /**
+     * Finds a list of encounters in the database by patient ID
+     * @param patientId - ID to search the database for
+     * @return List of encounters with associated patientId
+     */
     public List<Encounter> getEncountersByPatientId(Long patientId) {
         try {
             return encounterRepository.findByPatientId(patientId);
@@ -46,6 +55,11 @@ public class EncounterServiceImpl implements EncounterService{
         }
     }
 
+    /**
+     * Finds an encounter in the database by ID
+     * @param id - ID to search the database for
+     * @return - encounter with associated EncounterId
+     */
     public Encounter getEncounterById(Long id) {
         try {
             return encounterRepository.getEncounterById(id);
@@ -57,7 +71,7 @@ public class EncounterServiceImpl implements EncounterService{
 
 
     /**
-     * Insert and save a new Patient to database.
+     * Insert and save a new Encounter to database.
      *
      * @param encounter saved patient
      */

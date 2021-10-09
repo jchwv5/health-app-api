@@ -35,14 +35,13 @@ public class PatientController {
 
     /**
      * retrieves all patients from the database
-     * @param patient example of patient
      * @return list of patients currently present in the database
      */
     @GetMapping
-    public ResponseEntity<List<Patient>> getPatients(Patient patient) {
+    public ResponseEntity<List<Patient>> getPatients() {
         logger.info("Request received for getPatients");
 
-        return new ResponseEntity<>(patientService.getPatients(patient), HttpStatus.OK);
+        return new ResponseEntity<>(patientService.getPatients(), HttpStatus.OK);
     }
 
     /**
@@ -89,8 +88,9 @@ public class PatientController {
     }
 
     /**
-     * Deletes a product from the database with a product ID matching the ID provided
-     * @param id - The ID of the product in question to be deleted
+     * Deletes a patient from the database with a patient ID matching the ID provided,
+     * provided that they do not have any associated encounters
+     * @param id - The ID of the patient in question to be deleted
      * @return
      */
 

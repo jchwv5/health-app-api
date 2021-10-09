@@ -28,10 +28,14 @@ public class PatientServiceImpl implements PatientService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Retrieves all patients from the database
+     * @return List of all patients present in the database
+     */
     @Override
-    public List<Patient> getPatients(Patient patient) {
+    public List<Patient> getPatients() {
         try {
-            return patientRepository.findAll(Example.of(patient));
+            return patientRepository.findAll();
         } catch (DataAccessException e) {
             logger.error(e.getMessage());
             throw new ServerError(e.getMessage());

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface PatientService {
 
-    List<Patient> getPatients(Patient patient);
+    List<Patient> getPatients();
 
     Patient getPatientById(Long id);
 

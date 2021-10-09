@@ -54,12 +54,24 @@ public class EncounterController {
         return new ResponseEntity<>(encounterService.updateEncounter(patientId, id, encounter), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of encounters from the database associated with the provided Patient ID
+     *
+     * @param patientId ID to search the database for
+     * @return List of encounters with associated patientId
+     */
     @GetMapping
     public ResponseEntity<List<Encounter>> getEncountersByPatientId(@PathVariable Long patientId)
         throws Exception {
         return new ResponseEntity<>(encounterService.getEncountersByPatientId(patientId), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves an encounter from the databse with associated ID
+     *
+     * @param id - ID to search the database for
+     * @return Encounter with matching ID
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity<Encounter> getEncounterId(@PathVariable Long id)
             throws Exception {

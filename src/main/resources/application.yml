@@ -10,7 +10,7 @@ patients:
   load: true
 
 encounters:
-  number: 25
+  number: 5
   load: true
 
 logging:

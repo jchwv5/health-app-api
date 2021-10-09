@@ -6,13 +6,17 @@ import io.catalyte.training.patienthealth.domains.encounter.EncounterServiceImpl
 import io.catalyte.training.patienthealth.domains.patient.Patient;
 import io.catalyte.training.patienthealth.domains.patient.PatientRepository;
 import io.catalyte.training.patienthealth.domains.patient.PatientServiceImpl;
+import io.catalyte.training.patienthealth.exceptions.BadRequest;
+import io.catalyte.training.patienthealth.exceptions.ServerError;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -43,6 +47,7 @@ public class EncounterServiceTests {
 
     Patient patient = new Patient();
     Encounter encounter = new Encounter();
+    Encounter failEncounter = new Encounter();
 
     @Before
     public void setUp() throws ParseException {
@@ -82,9 +87,13 @@ public class EncounterServiceTests {
 
         encounterList.add(encounter);
 
+        failEncounter.setPatientId(1L);
+
         when(mockEncounterRepository.findAll()).thenReturn(encounterList);
 
         when(mockEncounterRepository.findById(any(Long.class))).thenReturn(Optional.of(encounter));
+
+        when(mockEncounterRepository.getEncounterById(any(Long.class))).thenReturn(encounter);
 
         when(mockEncounterRepository.findByPatientId(any(Long.class))).thenReturn(encounterList);
 
@@ -96,7 +105,7 @@ public class EncounterServiceTests {
 
         when(mockPatientRepository.getPatientById(any(Long.class))).thenReturn(patient);
 
-        when(this.mockPatientServiceImpl.getPatients(any(Patient.class))).thenReturn(patientList);
+        when(this.mockPatientServiceImpl.getPatients()).thenReturn(patientList);
 
 
     }
@@ -110,6 +119,37 @@ public class EncounterServiceTests {
 
     }
 
+    @Test (expected = ServerError.class)
+    public void testGetEncountersReturnsAccessException() throws Exception {
+
+        when(mockEncounterRepository.findAll()).thenThrow(new DataAccessException("..."){ });
+
+        List<Encounter> result = mockEncounterServiceImpl.getEncounters();
+
+        Assert.assertEquals(encounterList, result);
+
+    }
+
+    @Test
+    public void testGetEncounterByIdReturnsEncounter() throws Exception {
+
+        Encounter result = mockEncounterServiceImpl.getEncounterById(1L);
+
+        Assert.assertEquals(encounter, result);
+
+    }
+
+    @Test (expected = ServerError.class)
+    public void testGetEncounterByIdReturnsAccessException() throws Exception {
+
+        when(mockEncounterRepository.getEncounterById(any(Long.class))).thenThrow(new DataAccessException("..."){ });
+
+        Encounter result = mockEncounterServiceImpl.getEncounterById(1L);
+
+        Assert.assertEquals(encounter, result);
+
+    }
+
     @Test
     public void testGetEncountersByPatientIdReturnsEncounter() throws Exception {
 
@@ -119,12 +159,15 @@ public class EncounterServiceTests {
 
     }
 
-    @Test(expected = HttpServerErrorException.ServiceUnavailable.class)
-    public void testDBError() throws Exception {
+    @Test (expected = ServerError.class)
+    public void testGetEncountersByPatientIdReturnsAccessException() throws Exception {
 
-        when(mockEncounterServiceImpl.getEncountersByPatientId(patient.getId())).thenThrow(HttpServerErrorException.ServiceUnavailable.class);
+        when(mockEncounterRepository.findByPatientId(any(Long.class))).thenThrow(new DataAccessException("..."){ });
 
         List<Encounter> result = mockEncounterServiceImpl.getEncountersByPatientId(patient.getId());
+
+        Assert.assertEquals(encounterList, result);
+
     }
 
     @Test
@@ -135,6 +178,20 @@ public class EncounterServiceTests {
         Assert.assertEquals(encounter, result);
     }
 
+    @Test (expected = ResponseStatusException.class)
+    public void saveEncounterWillNotSaveEncounterWithErrors() throws Exception {
+
+        Encounter result = mockEncounterServiceImpl.saveEncounter(failEncounter, 1L);
+    }
+
+    @Test (expected = ServerError.class)
+    public void saveEncounterReturnsAccessException() throws Exception {
+
+        when(mockEncounterRepository.save(any(Encounter.class))).thenThrow(new DataAccessException("..."){ });
+
+        Encounter result = mockEncounterServiceImpl.saveEncounter(encounter, 1L);
+    }
+
     @Test
     public void updateEncounterReturnsEncounter() throws Exception {
 
@@ -142,6 +199,26 @@ public class EncounterServiceTests {
 
         Assert.assertEquals(encounter, result);
     }
+
+    @Test(expected = BadRequest.class)
+    public void updateEncounterWillNotSaveEncounterWithErrors() throws Exception {
+
+        Encounter result = mockEncounterServiceImpl.updateEncounter(1L, 1L, failEncounter);
+
+        Assert.assertEquals(encounter, result);
+    }
+
+    @Test (expected = ServerError.class)
+    public void updateEncounterReturnsAccessException() throws Exception {
+
+        when(mockEncounterRepository.save(any(Encounter.class))).thenThrow(new DataAccessException("..."){ });
+
+        Encounter result = mockEncounterServiceImpl.updateEncounter(1L, 1L, encounter);
+
+        Assert.assertEquals(encounter, result);
+    }
+
+
 
 
 
