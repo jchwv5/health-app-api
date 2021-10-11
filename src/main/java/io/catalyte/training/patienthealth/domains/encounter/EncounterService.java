@@ -6,7 +6,7 @@ public interface EncounterService {
 
     List<Encounter> getEncounters();
 
-    Encounter saveEncounter(Encounter encounter);
+    Encounter saveEncounter(Encounter encounter, Long id);
 
     Encounter updateEncounter(Long patientId, Long id, Encounter encounter);
 

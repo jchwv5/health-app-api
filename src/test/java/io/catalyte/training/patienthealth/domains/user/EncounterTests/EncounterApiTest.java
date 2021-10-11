@@ -143,8 +143,9 @@ public class EncounterApiTest {
         String encounterAsJson = mapper.writeValueAsString(encounter);
         mockMvc.perform(post(ENCOUNTERS_PATH, "1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(encounterAsJson))
-                        .andExpect(status().isCreated());
+                        .content(encounterAsJson)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
     }
 
 

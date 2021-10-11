@@ -76,9 +76,11 @@ public class EncounterServiceImpl implements EncounterService{
      * @param encounter saved patient
      */
     @Override
-    public Encounter saveEncounter(Encounter encounter) {
+    public Encounter saveEncounter(Encounter encounter, Long id) {
         Patient patient = patientRepository.getPatientById(encounter.getPatientId());
         if (patient == null) {throw new ResourceNotFound("Patient ID " + encounter.getPatientId() + " does not exist.");}
+        if (id != encounter.getPatientId()) {throw new BadRequest("Invalid Patient ID provided for path");}
+            encounterValidation.validateEncounter(encounter);
         try {
             encounterRepository.save(encounter);
             logger.info("Saved encounter");

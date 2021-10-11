@@ -21,9 +21,9 @@ public class EncounterController {
     private EncounterService encounterService;
 
     @PostMapping
-    public ResponseEntity saveEncounter(@RequestBody Encounter encounter) {
+    public ResponseEntity saveEncounter(@RequestBody Encounter encounter, @PathVariable Long patientId) {
 
-        encounterService.saveEncounter(encounter);
+        encounterService.saveEncounter(encounter, patientId);
 
         return new ResponseEntity<>(encounter, HttpStatus.CREATED);
     }

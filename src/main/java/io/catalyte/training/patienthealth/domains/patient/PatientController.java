@@ -100,6 +100,7 @@ public class PatientController {
         var isRemoved = patientService.deletePatientById(id);
 
         if (isRemoved == null) {
+            logger.info("Could not delete Patient  " + id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         logger.info("Patient with the ID of " + id + " was successfully deleted");

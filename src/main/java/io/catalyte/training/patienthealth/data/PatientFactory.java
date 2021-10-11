@@ -108,9 +108,9 @@ public class PatientFactory {
             "Aetna"
     };
     private static final String[] genders = {
-            "male",
-            "female",
-            "other"
+            "Male",
+            "Female",
+            "Other"
     };
     private static Random randomGenerator = new Random();
 

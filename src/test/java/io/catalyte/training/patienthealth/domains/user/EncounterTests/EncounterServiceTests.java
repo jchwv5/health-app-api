@@ -173,7 +173,7 @@ public class EncounterServiceTests {
     @Test
     public void saveEncounterReturnsEncounter() throws Exception {
 
-        Encounter result = mockEncounterServiceImpl.saveEncounter(encounter);
+        Encounter result = mockEncounterServiceImpl.saveEncounter(encounter, 1L);
 
         Assert.assertEquals(encounter, result);
     }
@@ -181,7 +181,7 @@ public class EncounterServiceTests {
     @Test (expected = ResponseStatusException.class)
     public void saveEncounterWillNotSaveEncounterWithErrors() throws Exception {
 
-        Encounter result = mockEncounterServiceImpl.saveEncounter(failEncounter);
+        Encounter result = mockEncounterServiceImpl.saveEncounter(failEncounter, 1L);
     }
 
     @Test (expected = ServerError.class)
@@ -189,7 +189,7 @@ public class EncounterServiceTests {
 
         when(mockEncounterRepository.save(any(Encounter.class))).thenThrow(new DataAccessException("..."){ });
 
-        Encounter result = mockEncounterServiceImpl.saveEncounter(encounter);
+        Encounter result = mockEncounterServiceImpl.saveEncounter(encounter, 1L);
     }
 
     @Test
