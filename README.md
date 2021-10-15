@@ -35,6 +35,8 @@ a standard of 100% method coverage and 75% line coverage.
 Postman collection containing all 2xx and 4xx scenarios can be found here
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/16776033-2eee7897-a167-4f06-bf54-a965dd0e9214?action=collection%2Ffork&collection-url=entityId%3D16776033-2eee7897-a167-4f06-bf54-a965dd0e9214%26entityType%3Dcollection%26workspaceId%3Db8eb4c28-95c7-4d4c-9e99-9341b9efc96f)
 
+NOTE:POSTMAN REQUESTS SHOULD BE RUN IN ORDER TO ENSURE PROPER DUPLICATION OF CERTAIN ERRORS
+
 ### Swagger
 Swagger documentation can be seen by running the API and navigating to (http://localhost:8085/swagger-ui.html)
 
