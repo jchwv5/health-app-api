@@ -43,5 +43,5 @@ Swagger configuration can be found in src/main/java/io/catalyte/training/patient
 ### Linting
 Project is linted according to Google Java coding standards.  Code may be manually linted by pressing `ctrl + alt + l`
 
-###Logging
+### Logging
 Log is managed with Log4j2, and is stored in a rolling file at C:\temp
