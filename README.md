@@ -40,7 +40,7 @@ Swagger documentation can be seen by running the API and navigating to (http://l
 
 Swagger configuration can be found in src/main/java/io/catalyte/training/patienthealth/config/SwaggerConfiguration.java
 
-###Linting
+### Linting
 Project is linted according to Google Java coding standards.  Code may be manually linted by pressing `ctrl + alt + l`
 
 ###Logging
