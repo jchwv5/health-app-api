@@ -75,7 +75,7 @@ public class EncounterValidation {
     public void validateTotalCost(ArrayList<String> errors, Encounter encounter) {
         String totalCost = String.valueOf(encounter.getTotalCost());
         validateRequired(errors, totalCost, "Total Cost");
-        if (totalCost == null || !Pattern.matches("^(0|[1-9][0-9]{0,2})(,\\d{3})*(\\.\\d{1,2})?$", totalCost)) {
+        if (totalCost == null || !Pattern.matches("^\\d*(\\.\\d+)?$", totalCost)) {
             errors.add("Invalid total cost. Total cost must be in USD format.");
         }
     }
@@ -89,7 +89,7 @@ public class EncounterValidation {
     public void validateCopay(ArrayList<String> errors, Encounter encounter) {
         String copay = String.valueOf(encounter.getCopay());
         validateRequired(errors, copay, "Copay");
-        if (copay == null || !Pattern.matches("^(0|[1-9][0-9]{0,2})(,\\d{3})*(\\.\\d{1,2})?$", copay)) {
+        if (copay == null || !Pattern.matches("^\\d*(\\.\\d+)?$", copay)) {
             errors.add("Invalid copay. Copay must be in USD format.");
         }
     }

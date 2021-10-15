@@ -172,7 +172,7 @@ public class PatientValidation {
      */
     public void validateGender(ArrayList<String> errors, Patient patient) {
         String gender = patient.getGender();
-        validateRequired(errors, gender, "Age");
+        validateRequired(errors, gender, "Gender");
         if (gender == null || !isValidGender(gender)) {
             errors.add(
                     "Invalid gender. Please enter male, female, or other.");

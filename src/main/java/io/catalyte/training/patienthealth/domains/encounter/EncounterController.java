@@ -41,7 +41,7 @@ public class EncounterController {
             @PathVariable Long patientId,
             @RequestBody Encounter encounter
     ) {
-        logger.info("Request received for Update User");
+        logger.info("Request received for Update Encounter");
         return new ResponseEntity<>(encounterService.updateEncounter(patientId, id, encounter), HttpStatus.OK);
     }
 
@@ -54,6 +54,7 @@ public class EncounterController {
     @GetMapping
     public ResponseEntity<List<Encounter>> getEncountersByPatientId(@PathVariable Long patientId)
         throws Exception {
+        logger.info("Request received for Get Encounters by Patient ID: " + patientId);
         return new ResponseEntity<>(encounterService.getEncountersByPatientId(patientId), HttpStatus.OK);
     }
 
@@ -66,6 +67,7 @@ public class EncounterController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Encounter> getEncounterId(@PathVariable Long id)
             throws Exception {
+        logger.info("Request received for Get Encounter by ID: " + id);
         return new ResponseEntity<>(encounterService.getEncounterById(id), HttpStatus.OK);
     }
 

@@ -65,7 +65,7 @@ public class PatientController {
      */
     @PostMapping
     public ResponseEntity savePatient(@RequestBody Patient patient) {
-
+        logger.info("Request received for savePatient");
         patientService.savePatient(patient);
 
         return new ResponseEntity<>(patient, HttpStatus.CREATED);
