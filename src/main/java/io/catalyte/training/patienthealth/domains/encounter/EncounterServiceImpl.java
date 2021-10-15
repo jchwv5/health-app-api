@@ -79,7 +79,11 @@ public class EncounterServiceImpl implements EncounterService{
     @Override
     public Encounter saveEncounter(Encounter encounter, Long id) {
         Patient patient = patientRepository.getPatientById(encounter.getPatientId());
+        BigDecimal checkCost = encounter.getTotalCost();
         if (patient == null) {throw new ResourceNotFound("Patient ID " + encounter.getPatientId() + " does not exist.");}
+        if (checkCost.compareTo(BigDecimal.ZERO) == 0) {
+            encounter.setTotalCost(BigDecimal.valueOf(0.00));
+        }
         if (id != encounter.getPatientId()) {throw new BadRequest("Invalid Patient ID provided for path");}
             encounterValidation.validateEncounter(encounter);
         try {
@@ -101,40 +105,29 @@ public class EncounterServiceImpl implements EncounterService{
      */
     @Override
     public Encounter updateEncounter(Long patientId, Long id, Encounter encounter) {
-
         Encounter existingEncounter;
-
         BigDecimal checkCost = encounter.getTotalCost();
-
         try {
             existingEncounter = encounterRepository.findById(id).orElse(null);
         } catch (DataAccessException dae) {
             logger.error(dae.getMessage());
             throw new ServerError(dae.getMessage());
         }
-
         if (existingEncounter == null) {
             logger.error("Encounter with id: " + id + " does not exist");
             throw new ResourceNotFound("Encounter with id: " + id + " does not exist");
         }
-
         if (patientId != encounter.getPatientId()) {throw new BadRequest("Invalid Patient ID provided for path");}
         if (id != encounter.getId()){throw new BadRequest("Invalid Encounter ID provided for path");}
         encounterValidation.validateEncounter(encounter);
         //CHECKS IF PATIENT EXISTS IN THE DATABASE
-
-
-
-
         // GIVE THE ENCOUNTER ID IF NOT SPECIFIED IN BODY TO AVOID DUPLICATE USERS
         if (encounter.getId() == null) {
             encounter.setId(id);
         }
-
         if (checkCost.compareTo(BigDecimal.ZERO) == 0) {
             encounter.setTotalCost(BigDecimal.valueOf(0.00));
         }
-
         try {
             logger.info("Updated encounter ID: " + encounter.getId());
             return encounterRepository.save(encounter);
