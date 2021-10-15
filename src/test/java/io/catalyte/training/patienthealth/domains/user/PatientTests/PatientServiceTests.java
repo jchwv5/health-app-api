@@ -5,7 +5,6 @@ import io.catalyte.training.patienthealth.domains.encounter.EncounterRepository;
 import io.catalyte.training.patienthealth.domains.encounter.EncounterServiceImpl;
 import io.catalyte.training.patienthealth.domains.patient.Patient;
 import io.catalyte.training.patienthealth.domains.patient.PatientRepository;
-import io.catalyte.training.patienthealth.domains.patient.PatientService;
 import io.catalyte.training.patienthealth.domains.patient.PatientServiceImpl;
 import io.catalyte.training.patienthealth.exceptions.BadRequest;
 import io.catalyte.training.patienthealth.exceptions.ConflictException;
@@ -17,10 +16,8 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.math.BigDecimal;
 import java.text.ParseException;

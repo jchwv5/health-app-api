@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -103,6 +104,8 @@ public class EncounterServiceImpl implements EncounterService{
 
         Encounter existingEncounter;
 
+        BigDecimal checkCost = encounter.getTotalCost();
+
         try {
             existingEncounter = encounterRepository.findById(id).orElse(null);
         } catch (DataAccessException dae) {
@@ -126,6 +129,10 @@ public class EncounterServiceImpl implements EncounterService{
         // GIVE THE ENCOUNTER ID IF NOT SPECIFIED IN BODY TO AVOID DUPLICATE USERS
         if (encounter.getId() == null) {
             encounter.setId(id);
+        }
+
+        if (checkCost.compareTo(BigDecimal.ZERO) == 0) {
+            encounter.setTotalCost(BigDecimal.valueOf(0.00));
         }
 
         try {

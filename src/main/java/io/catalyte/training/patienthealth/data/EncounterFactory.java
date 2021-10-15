@@ -1,11 +1,9 @@
 package io.catalyte.training.patienthealth.data;
 
 import io.catalyte.training.patienthealth.domains.encounter.Encounter;
-import io.catalyte.training.patienthealth.domains.patient.Patient;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
