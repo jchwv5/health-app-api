@@ -80,9 +80,13 @@ public class EncounterServiceImpl implements EncounterService{
     public Encounter saveEncounter(Encounter encounter, Long id) {
         Patient patient = patientRepository.getPatientById(encounter.getPatientId());
         BigDecimal checkCost = encounter.getTotalCost();
+        BigDecimal checkCopay = encounter.getCopay();
         if (patient == null) {throw new ResourceNotFound("Patient ID " + encounter.getPatientId() + " does not exist.");}
         if (checkCost.compareTo(BigDecimal.ZERO) == 0) {
-            encounter.setTotalCost(BigDecimal.valueOf(0.00));
+            encounter.setTotalCost(BigDecimal.ZERO.setScale(2));
+        }
+        if (checkCopay.compareTo(BigDecimal.ZERO) == 0) {
+            encounter.setCopay(BigDecimal.ZERO.setScale(2));
         }
         if (id != encounter.getPatientId()) {throw new BadRequest("Invalid Patient ID provided for path");}
             encounterValidation.validateEncounter(encounter);
@@ -107,6 +111,7 @@ public class EncounterServiceImpl implements EncounterService{
     public Encounter updateEncounter(Long patientId, Long id, Encounter encounter) {
         Encounter existingEncounter;
         BigDecimal checkCost = encounter.getTotalCost();
+        BigDecimal checkCopay = encounter.getCopay();
         try {
             existingEncounter = encounterRepository.findById(id).orElse(null);
         } catch (DataAccessException dae) {
@@ -126,7 +131,10 @@ public class EncounterServiceImpl implements EncounterService{
             encounter.setId(id);
         }
         if (checkCost.compareTo(BigDecimal.ZERO) == 0) {
-            encounter.setTotalCost(BigDecimal.valueOf(0.00));
+            encounter.setTotalCost(BigDecimal.ZERO.setScale(2));
+        }
+        if (checkCopay.compareTo(BigDecimal.ZERO) == 0) {
+            encounter.setCopay(BigDecimal.ZERO.setScale(2));
         }
         try {
             logger.info("Updated encounter ID: " + encounter.getId());

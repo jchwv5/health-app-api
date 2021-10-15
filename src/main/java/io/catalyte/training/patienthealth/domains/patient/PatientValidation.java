@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class PatientValidation {
@@ -41,7 +40,7 @@ public class PatientValidation {
     public void validateSsn (ArrayList<String> errors, Patient patient) {
         String ssn = patient.getSsn();
         validateRequired(errors, ssn, "SSN");
-        if (ssn == null || !Pattern.matches("^(?!666|000|9\\d{2})\\d{3}-(?!00)\\d{2}-(?!0{4})\\d{4}$", ssn)) {
+        if (ssn == null || !Pattern.matches("^\\d{3}-\\d{2}-\\d{4}$", ssn)) {
             errors.add(
                     "Invalid SSN. SSN must be in xxx-xx-xxxx format, where 'x' represents a digit.");
         }
@@ -175,7 +174,7 @@ public class PatientValidation {
         validateRequired(errors, gender, "Gender");
         if (gender == null || !isValidGender(gender)) {
             errors.add(
-                    "Invalid gender. Please enter male, female, or other.");
+                    "Invalid gender. Please enter Male, Female, or Other.");
         }
     }
 
@@ -227,9 +226,8 @@ public class PatientValidation {
         }
     }
 
-    public boolean isValidGender (String args) {
-        String gender = args.toLowerCase(Locale.ROOT);
-        return gender.equals("male") || gender.equals("female") || gender.equals("other");
+    public boolean isValidGender (String gender) {
+        return gender.equals("Male") || gender.equals("Female") || gender.equals("Other");
     }
 
 

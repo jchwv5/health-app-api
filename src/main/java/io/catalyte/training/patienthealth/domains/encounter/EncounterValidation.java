@@ -1,11 +1,9 @@
 package io.catalyte.training.patienthealth.domains.encounter;
 
-import io.catalyte.training.patienthealth.domains.patient.Patient;
-import io.catalyte.training.patienthealth.domains.patient.PatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -73,9 +71,11 @@ public class EncounterValidation {
      * @param encounter Encounter being validated
      */
     public void validateTotalCost(ArrayList<String> errors, Encounter encounter) {
+        BigDecimal checkCopay = encounter.getTotalCost();
         String totalCost = String.valueOf(encounter.getTotalCost());
         validateRequired(errors, totalCost, "Total Cost");
-        if (totalCost == null || !Pattern.matches("^\\d*(\\.\\d+)?$", totalCost)) {
+        if (totalCost == null || ((!Pattern.matches("^[1-9]\\d*\\.\\d{2}?$", totalCost))
+                && !(checkCopay.compareTo(BigDecimal.ZERO) == 0))){
             errors.add("Invalid total cost. Total cost must be in USD format.");
         }
     }
@@ -87,9 +87,11 @@ public class EncounterValidation {
      * @param encounter Encounter being validated
      */
     public void validateCopay(ArrayList<String> errors, Encounter encounter) {
+        BigDecimal checkCopay = encounter.getCopay();
         String copay = String.valueOf(encounter.getCopay());
         validateRequired(errors, copay, "Copay");
-        if (copay == null || !Pattern.matches("^\\d*(\\.\\d+)?$", copay)) {
+        if (copay == null || ((!Pattern.matches("^[1-9]\\d*\\.\\d{2}?$", copay))
+                && !(checkCopay.compareTo(BigDecimal.ZERO) == 0))){
             errors.add("Invalid copay. Copay must be in USD format.");
         }
     }
