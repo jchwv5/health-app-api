@@ -49,7 +49,7 @@ public class EncounterFactory {
     private static Random randomGenerator = new Random();
 
     public static Long getPatientId(int patientRepositoryLength) {
-        return (long) randomGenerator.nextInt(patientRepositoryLength) + 1;
+        return (long) randomGenerator.nextInt(patientRepositoryLength - 5) + 1;
     }
 
     public static String getNotes() { return "Patient " + notes[randomGenerator.nextInt(notes.length)];
